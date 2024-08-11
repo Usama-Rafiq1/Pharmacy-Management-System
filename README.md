@@ -1,4 +1,4 @@
-med-store-management
+Pharmacy Management System
 ====================
 
 Medicine Store Management System customer verification support (Python, SQL, Tkinter GUI)
