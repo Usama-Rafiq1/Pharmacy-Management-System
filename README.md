@@ -1,7 +1,7 @@
 Pharmacy Management System
 ====================
 
-Medicine Store Management System customer verification support (Python, SQL, Tkinter GUI)
+Pharmacy Management System (Python, SQL, Tkinter GUI)
 
 Abstract
 ========
