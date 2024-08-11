@@ -1,4 +1,6 @@
 from tkinter import *
+from customtkinter import *
+from PIL import Image
 import time
 import sqlite3
 import random
@@ -11,7 +13,7 @@ flag=''
 flags=''
 
 login=sqlite3.connect("admin.db")
-l=login.cursor()
+l=login.cursor()    
 
 c=sqlite3.connect("medicine.db")
 cur=c.cursor()
@@ -20,96 +22,132 @@ columns=('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Da
 
 def open_win(): #OPENS MAIN MENU----------------------------------------------------------------------------MAIN MENU
     global apt, flag
-    flag='apt'
-    apt=Tk()
-    apt.title("Interface")
-    Label(apt, text="CHEMIST AND DRUGSHOP").grid(row=0,column=0,columnspan=3)
-    Label(apt, text='*'*80).grid(row=1,column=0,columnspan=3)
-    Label(apt, text='-'*80).grid(row=3,column=0,columnspan=3) 
+    flag = 'apt'
 
-    Label(apt, text="Stock Maintenance").grid(row=2,column=0)
-    Button(apt,text='New V.C.', width=25, command=val_cus).grid(row=4,column=0)
-    Button(apt,text='Add product to Stock', width=25,command=stock).grid(row=5,column=0)
-    Button(apt,text='Delete product from Stock', width=25,command=delete_stock).grid(row=6,column=0)
+    apt = CTk()
+    set_appearance_mode("dark")
+    apt.geometry("800x480")  # Adjusted width to accommodate sidebar
+    apt.title("Main Menu")
+
+    set_appearance_mode("light")
+    # Sidebar setup
+    sidebar_frame = CTkFrame(master=apt, fg_color="#ffffff",  width=200, height=650, corner_radius=10)
+    sidebar_frame.pack_propagate(0)
+    sidebar_frame.pack(fill="y", anchor="w", side="left")
+
+    logo_img_data = Image.open("Uz.png")
+    logo_img = CTkImage(dark_image=logo_img_data, light_image=logo_img_data, size=(150, 100))
+    CTkLabel(master=sidebar_frame, text="", image=logo_img).pack(pady=(38, 0), anchor="center")
+
+    text_label = CTkLabel(master=sidebar_frame, text="\nDBMS Project\nPharmacy Managment System\n\n\nMembers\n\nZain-ul-Wara [2022F-BCS-071]\n Ushna-Zia [2022F-BCS-285]", 
+                          font=("Gotham Ultra", 12), text_color="#000000")
+    text_label.pack(pady=(2, 0), anchor="center")
     
+    # Main frame setup
+    main_frame = CTkFrame(master=apt, fg_color="#121317")
+    main_frame.pack(side="left", fill="both", expand=True)
 
-    Label(apt, text="Access Database").grid(row=2,column=1)
-    Button(apt,text='Modify',width=15, command=modify).grid(row=4,column=1)
-    Button(apt,text='Search', width=15, command=search).grid(row=5,column=1)
-    Button(apt,text='Expiry Check', width=15, command=exp_date).grid(row=6,column=1)
+    CTkLabel(main_frame, text="UZ Pharmacy Management", font=("Gotham Ultra", 24), text_color="#ffffff").grid(row=0, column=0, columnspan=3, pady=(20, 10))
+    CTkLabel(main_frame, text=(' ' * 5)+('*' * 105), font=("Gotham Ultra", 12), text_color="#ffffff").grid(row=1, column=0, columnspan=3)
+    CTkLabel(main_frame, text=(' ' * 5)+('-' * 115), font=("Gotham Ultra", 12), text_color="#ffffff").grid(row=3, column=0, columnspan=6) 
 
-    Label(apt, text="Handle Cash Flows").grid(row=2,column=2)
-    Button(apt,text="Check Today's Revenue", width=20,command=show_rev).grid(row=5,column=2)
-    Button(apt,text='Billing', width=20, command=billing).grid(row=4,column=2)
+    CTkLabel(main_frame, text="Stock Maintenance", font=("Gotham Ultra", 16), text_color="#ffffff").grid(row=2, column=0, pady=(10, 10))
+    CTkButton(main_frame, text='New Customer', width=100, command=val_cus, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=4, column=0, pady=(5, 5))
+    CTkButton(main_frame, text='Add product to Stock', width=100, command=stock, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=5, column=0, pady=(5, 5))
+    CTkButton(main_frame, text='Delete product from Stock', width=100, command=delete_stock, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=6, column=0, pady=(5, 5))
 
-    Label(apt, text='-'*80).grid(row=12,column=0,columnspan=3)    
-    Button(apt,text='Logout',command=again).grid(row=13, column=2)
+    CTkLabel(main_frame, text="Access Database", font=("Gotham Ultra", 16), text_color="#ffffff").grid(row=2, column=1, pady=(10, 10))
+    CTkButton(main_frame, text='Modify', width=100, command=modify, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=4, column=1, pady=(5, 5))
+    CTkButton(main_frame, text='Search', width=100, command=search, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=5, column=1, pady=(5, 5))
+    CTkButton(main_frame, text="Check Today's Revenue", command=show_rev, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=6, column=1, pady=(5, 5))
+
+    CTkLabel(main_frame, text="Handle Cash Flows", font=("Gotham Ultra", 16), text_color="#ffffff").grid(row=2, column=2, pady=(10, 10))
+    CTkButton(main_frame, text='Expiry Check', width=100, command=exp_date, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=5, column=2, pady=(5, 5))
+    CTkButton(main_frame, text='Billing', width=100, command=billing, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=4, column=2, pady=(5, 5))
+
+    CTkLabel(main_frame, text='-' * 80, font=("Gotham Ultra", 12), text_color="#ffffff").grid(row=12, column=0, columnspan=3)
+    CTkButton(main_frame, text='Logout', command=again, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=13, column=1)
+
     apt.mainloop()
 
-def delete_stock(): #OPENS DELETE WINDOW----------------------------------------------------DELETES A PARTICULAR STOCK ITEM
-    global cur, c, flag, lb1, d
+def delete_stock():  # OPENS DELETE WINDOW
+    global cur, c, flag, lb1, d, selected_product_label
     apt.destroy()
-    flag='d'
-    d=Tk()
+    flag = 'd'
+    d = CTk()
+    set_appearance_mode("dark")
+    d.geometry("600x400")
     d.title("Delete a product from Stock")
-    Label(d,text='Enter Product to delete:').grid(row=0,column=0)
-    Label(d,text='',width=30,bg='white').grid(row=0,column=1)
-    Label(d,text='Product').grid(row=2,column=0)
-    Label(d,text='Qty.  Exp.dt.     Cost                           ').grid(row=2,column=1)
+
+    # Header
+    CTkLabel(d, text="Delete a product from Stock", font=("Gotham Ultra", 20), text_color="#ffffff").grid(row=0, column=0, columnspan=4, pady=(20, 10))
+    
+    # Product Entry
+    CTkLabel(d, text='Select a Product & Press to delete:', font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=1, column=1, pady=(10, 10))
+    
+    # Product Details
+    CTkLabel(d, text='Product', font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=2, column=0, pady=(10, 10))
+    CTkLabel(d, text='Qty.   Exp.dt.   Cost', font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=2, column=1, pady=(10, 10))
+    
     ren()
-    b=Button(d,width=20,text='Delete',command=delt).grid(row=0,column=3)
-    b=Button(d,width=20,text='Main Menu',command=main_menu).grid(row=5,column=3) 
+    
+    # Buttons
+    CTkButton(d, text='Delete', command=delt, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=3, column=3, pady=(20, 10))
+    CTkButton(d, text='Main Menu', command=main_menu, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=4, column=3, pady=(20, 10))
+    
+    # Selected Product Label
+    selected_product_label = CTkLabel(d, text='', font=("Gotham Ultra", 14), text_color="#ffffff")
+    selected_product_label.grid(row=0, column=1, pady=(20, 10))
+
     d.mainloop()
 
 def ren():
-    global lb1,d,cur,c
+    global lb1, d, cur, c, lb2
     def onvsb(*args):
         lb1.yview(*args)
         lb2.yview(*args)
-    def onmousewheel():
-        lb1.ywiew=('scroll',event.delta,'units')
-        lb2.ywiew=('scroll',event.delta,'units')
+    def onmousewheel(event):
+        lb1.yview('scroll', event.delta, 'units')
+        lb2.yview('scroll', event.delta, 'units')
         return 'break'
-    cx=0
-    vsb=Scrollbar(orient='vertical',command=onvsb)
-    lb1=Listbox(d,width=25, yscrollcommand=vsb.set)
-    lb2=Listbox(d,width=30,yscrollcommand=vsb.set)
-    vsb.grid(row=3,column=2,sticky=N+S)
-    lb1.grid(row=3,column=0)
-    lb2.grid(row=3,column=1)
-    lb1.bind('<MouseWheel>',onmousewheel)
-    lb2.bind('<MouseWheel>',onmousewheel)
-    cur.execute("select *from med")
+    
+    cx = 0
+    vsb = Scrollbar(orient='vertical', command=onvsb)
+    lb1 = Listbox(d, width=25, yscrollcommand=vsb.set)
+    lb2 = Listbox(d, width=30, yscrollcommand=vsb.set)
+    vsb.grid(row=3, column=2, sticky=N+S)
+    lb1.grid(row=3, column=0)
+    lb2.grid(row=3, column=1)
+    lb1.bind('<MouseWheel>', onmousewheel)
+    lb2.bind('<MouseWheel>', onmousewheel)
+    cur.execute("select * from med")
     for i in cur:
-        cx+=1
-        s1=[str(i[0]),str(i[1])]
-        s2=[str(i[3]),str(i[6]),str(i[4])]
-        lb1.insert(cx,'. '.join(s1))
-        lb2.insert(cx,'   '.join(s2))
+        cx += 1
+        s1 = [str(i[0]), str(i[1])]
+        s2 = [str(i[3]), str(i[6]), str(i[4])]
+        lb1.insert(cx, '. '.join(s1))
+        lb2.insert(cx, '   '.join(s2))
     c.commit()
     lb1.bind('<<ListboxSelect>>', sel_del)
 
 def sel_del(e):
-    global lb1, d, cur, c,p, sl2
-    p=lb1.curselection()
-    print (p)
-    x=0
-    sl2=''
+    global lb1, d, cur, c, p, sl2, selected_product_label
+    p = lb1.curselection()
+    x = 0
+    sl2 = ''
     cur.execute("select * from med")
     for i in cur:
-        print (x, p[0])
-        if x==int(p[0]):
-            sl2=i[0]
+        if x == int(p[0]):
+            sl2 = i[0]
             break
-        x+=1
+        x += 1
     c.commit()
-    print (sl2)
-    Label(d,text=' ',bg='white', width=20).grid(row=0,column=1)
     cur.execute('Select * from med')
     for i in cur:
-        if i[0]==sl2:
-            Label(d,text=i[0]+'. '+i[1],bg='white').grid(row=0,column=1)
+        if i[0] == sl2:
+            selected_product_label.configure(text=i[0] + '. ' + i[1])
     c.commit()
+
     
 def delt():
     global p,c,cur,d
@@ -119,8 +157,8 @@ def delt():
 
 def modify():    # window for modification-----------------------------------------------------------------------MODIFY
     global cur, c, accept, flag, att, up, n, name_, apt, st, col,col_n
-    col=('', '', 'type', 'qty_left', 'cost', 'purpose', 'expdt', 'loc', 'mfg')
-    col_n=('', '', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
+    col=('', 'name', 'type', 'qty_left', 'cost', 'purpose', 'expdt', 'loc', 'mfg')
+    col_n=('', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
     flag='st'
     name_=''
     apt.destroy()
@@ -129,9 +167,10 @@ def modify():    # window for modification--------------------------------------
     for i in cur:
         n.append(i[1])
     c.commit()
-    st=Tk()
+    st=CTk()
+    set_appearance_mode("dark")
     st.title('MODIFY')
-    Label(st, text='-'*48+' MODIFY DATABASE '+'-'*48).grid(row=0, column=0,columnspan=6)
+    CTkLabel(st, text='-'*48+' MODIFY DATABASE '+'-'*48, font=("Gotham Ultra", 14), text_color="#ededed").grid(row=0, column=0,columnspan=6)
     def onvsb(*args):
         name_.yview(*args)
     def onmousewheel():
@@ -150,17 +189,17 @@ def modify():    # window for modification--------------------------------------
     name_.bind('<MouseWheel>',onmousewheel)
     name_.bind('<<ListboxSelect>>', sel_mn)
 
-    Label(st, text='Enter Medicine Name: ').grid(row=1, column=0)
-    Label(st, text='Enter changed Value of: ').grid(row=2, column=0)
+    CTkLabel(st, text='Enter Medicine Name: ', font=("Gotham Ultra", 14), text_color="#ededed").grid(row=1, column=0)
+    CTkLabel(st, text='Enter changed Value of: ', font=("Gotham Ultra", 14), text_color="#ededed").grid(row=2, column=0)
     att=Spinbox(st, values=col_n)
     att.grid(row=2, column=1)
     up=Entry(st)
     up.grid(row=2, column=2)
-    Button(st,width=10,text='Submit', command=save_mod).grid(row=2, column=4)
-    Button(st,width=10,text='Reset', command=res).grid(row=2, column=5)
-    Button(st,width=10,text='Show data', command=show_val).grid(row=1, column=4)
-    Label(st, text='-'*120).grid(row=3,column=0,columnspan=6)
-    Button(st,width=10,text='Main Menu',command=main_menu).grid(row=5,column=5)
+    CTkButton(st,width=10,text='Submit', command=save_mod, fg_color="#e04a32", hover_color="#e04a32").grid(row=2, column=4)
+    CTkButton(st,width=10,text='Reset', command=res, fg_color="#e04a32", hover_color="#e04a32").grid(row=2, column=5)
+    CTkButton(st,width=10,text='Show data', command=show_val,fg_color="#e04a32", hover_color="#e04a32").grid(row=1, column=4)
+    CTkLabel(st, text='-'*120, font=("Gotham Ultra", 14), text_color="#ededed").grid(row=3,column=0,columnspan=6)
+    CTkButton(st,width=10,text='Main Menu',command=main_menu, fg_color="#e04a32", hover_color="#e04a32").grid(row=5,column=5)
     st.mainloop()
 
 def res():
@@ -217,22 +256,24 @@ def stock():    #add to stock window--------------------------------------------
     apt.destroy()
     flag='sto'
     accept=['']*10
-    sto=Tk()
+    sto=CTk()
+    set_appearance_mode("dark")
     sto.title('STOCK ENTRY')
-    Label(sto,text='ENTER NEW PRODUCT DATA TO THE STOCK').grid(row=0,column=0,columnspan=2)
-    Label(sto,text='-'*50).grid(row=1,column=0,columnspan=2)
+    CTkLabel(sto, text='ENTER NEW PRODUCT DATA TO THE STOCK', font=("Gotham Ultra", 14), text_color="#ededed").grid(row=0, column=0, columnspan=4, sticky='nsew')
+
+    CTkLabel(sto,text=(' '*20)+('-'*70), font=("Gotham Ultra", 14), text_color="#ededed").grid(row=1,column=0,columnspan=2)
     for i in range(1,len(columns)):
-        Label(sto,width=15,text=' '*(14-len(str(columns[i])))+str(columns[i])+':').grid(row=i+2,column=0)
-        accept[i]=Entry(sto)
+        CTkLabel(sto,width=15,text=' '*(14-len(str(columns[i])))+str(columns[i])+':', font=("Gotham Ultra", 11), text_color="#ededed").grid(row=i+2,column=0)
+        accept[i]=CTkEntry(sto,width=220)
         accept[i].grid(row=i+2, column=1)
-    Button(sto,width=15,text='Submit',command=submit).grid(row=12,column=1)
-    Label(sto,text='-'*165).grid(row=13,column=0,columnspan=7)
-    Button(sto,width=15,text='Reset',command=reset).grid(row=12,column=0)
-    Button(sto,width=15,text='Refresh stock',command=ref).grid(row=12,column=4)
+    CTkButton(sto,width=15,text='Submit',command=submit, fg_color="#e04a32", hover_color="#e04a32").grid(row=12,column=1)
+    CTkLabel(sto,text='-'*165, font=("Gotham Ultra", 14), text_color="#ededed").grid(row=13,column=0,columnspan=7)
+    CTkButton(sto,width=15,text='Reset',command=reset, fg_color="#e04a32", hover_color="#e04a32").grid(row=12,column=0)
+    CTkButton(sto,width=15,text='Refresh stock',command=ref, fg_color="#e04a32", hover_color="#e04a32").grid(row=12,column=4)
     for i in range(1,6):
-        Label(sto,text=columns[i]).grid(row=14,column=i-1)
-    Label(sto,text='Exp           Rack   Manufacturer                      ').grid(row=14,column=5)
-    Button(sto,width=10,text='Main Menu',command=main_menu).grid(row=12,column=5)
+        CTkLabel(sto,text=columns[i]).grid(row=14,column=i-1)
+    CTkLabel(sto,text='Exp           Rack   Manufacturer                      ').grid(row=14,column=5)
+    CTkButton(sto,width=10,text='Main Menu',command=main_menu, fg_color="#e04a32", hover_color="#e04a32").grid(row=12,column=5)
     ref()
     sto.mainloop()
 
@@ -291,13 +332,12 @@ def ref(): # creates a multi-listbox manually to show the whole database
 def reset():
     global sto, accept
     for i in range(1,len(columns)):
-        Label(sto,width=15,text=' '*(14-len(str(columns[i])))+str(columns[i])+':').grid(row=i+2,column=0)
-        accept[i]=Entry(sto)
+        CTkLabel(sto,width=15,text=' '*(14-len(str(columns[i])))+str(columns[i])+':', font=("Arial Bold", 11), text_color="#601E88").grid(row=i+2,column=0)
+        accept[i]=CTkEntry(sto,width=220)
         accept[i].grid(row=i+2, column=1)
     
 def submit(): #for new stock submission
     global accept, c, cur, columns, sto
-    prev=time.clock()
     x=['']*10
     cur.execute("select * from med")
     for i in cur:
@@ -308,10 +348,9 @@ def submit(): #for new stock submission
     cur.execute(sql)
     cur.execute("select * from med")
     c.commit()
-    now=time.clock()
-    print (now-prev)
-    top=Tk()
-    Label(top,width=20, text='Success!').pack()
+    top=CTk()
+    set_appearance_mode("dark")
+    CTkLabel(top,width=20, text='Success!', font=("Arial Bold", 25)).pack()
     top.mainloop()
     main_menu()
 
@@ -342,20 +381,22 @@ def exp_date(): # expiry window open--------------------------------------------
     for i in cur:
         n.append(i[1])
     c.commit()
-    exp=Tk()
+    exp=CTk()
+    set_appearance_mode("dark")
+    exp.geometry("450x450")
     exp.title('EXPIRY CHECK')
-    Label(exp,text='Today : '+str(now[2])+'/'+str(now[1])+'/'+str(now[0])).grid(row=0, column=0, columnspan=3)
-    Label(exp,text='Selling Expired Medicines and Drugs is Illegal').grid(row=1, column=0,columnspan=3)
-    Label(exp,text='-'*80).grid(row=2, column=0,columnspan=3)
+    CTkLabel(exp,text='Today : '+str(now[2])+'/'+str(now[1])+'/'+str(now[0]), font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=0, column=0, columnspan=3)
+    CTkLabel(exp,text='Selling Expired Medicines and Drugs is Illegal', font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=1, column=0,columnspan=3)
+    CTkLabel(exp,text='-'*80, font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=2, column=0,columnspan=3)
     s=Spinbox(exp,values=n)
     s.grid(row=3, column=0)
-    Button(exp,text='Check Expiry date', command=s_exp).grid(row=3, column=1)
-    Label(exp,text='-'*80).grid(row=4, column=0,columnspan=3)
+    CTkButton(exp,text='Check Expiry date', command=s_exp, fg_color="#e04a32", hover_color="#e04a32").grid(row=3, column=1)
+    CTkLabel(exp,text='-'*80, font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=4, column=0,columnspan=3)
     if flags=='apt1':
-        Button(exp,text='Main Menu', command=main_cus).grid(row=5, column=2)
+        CTkButton(exp,text='Main Menu', command=main_cus, fg_color="#e04a32", hover_color="#e04a32").grid(row=5, column=2)
     else:
-        Button(exp,width=20,text='Check Products expiring', command=exp_dt).grid(row=5, column=0)
-        Button(exp,text='Main Menu', command=main_menu).grid(row=5, column=2)
+        CTkButton(exp,width=20,text='Check Products expiring', command=exp_dt, fg_color="#e04a32", hover_color="#e04a32").grid(row=5, column=0)
+        CTkButton(exp,text='Main Menu', command=main_menu,fg_color="#e04a32", hover_color="#e04a32").grid(row=5, column=2)
     exp.mainloop()
 
 def s_exp():    # shows the expiry date of the medicine entered
@@ -421,32 +462,33 @@ def billing(): # to create bills for customer-----------------------------------
     else:
         apt.destroy()
     flag='st'
-    st=Tk()
+    st=CTk()
+    set_appearance_mode("dark")
     st.title('BILLING SYSTEM')
-    Label(st,text='-'*48+'BILLING SYSTEM'+'-'*49).grid(row=0,column=0,columnspan=7)
-    Label(st,text='Enter Name: ').grid(row=1,column=0)
-    name1=Entry(st)
+    CTkLabel(st,text='-'*48+'BILLING SYSTEM'+'-'*49,font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=0,column=0,columnspan=7)
+    CTkLabel(st,text='Enter Name: ',font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=1,column=0)
+    name1=CTkEntry(st)
     name1.grid(row=1, column=1)
-    Label(st,text='Enter Address: ').grid(row=2,column=0)
-    add=Entry(st)
+    CTkLabel(st,text='Enter Address: ',font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=2,column=0)
+    add=CTkEntry(st)
     add.grid(row=2, column=1)
-    Label(st,text="Value Id (if available)").grid(row=3, column=0)
-    vc_id=Entry(st)
+    CTkLabel(st,text="Value Id (if available): ",font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=3, column=0)
+    vc_id=CTkEntry(st)
     vc_id.grid(row=3, column=1)
-    Button(st,text='Check V.C.', command=blue).grid(row=4, column=0)
-    Label(st,text='-'*115).grid(row=6, column=0,columnspan=7)
-    Label(st,text='SELECT PRODUCT',width=25,relief='ridge').grid(row=7, column=0)
-    Label(st,text=' RACK  QTY LEFT     COST          ',width=25,relief='ridge').grid(row=7, column=1)
-    Button(st,text='Add to bill',width=15,command=append2bill).grid(row=8, column=6)
-    Label(st,text='QUANTITY',width=20,relief='ridge').grid(row=7, column=5)
-    qtys=Entry(st)
+    CTkButton(st,text='Check V.C.', command=blue,fg_color="#e04a32", hover_color="#e04a32").grid(row=4, column=0)
+    CTkLabel(st,text='-'*115,font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=6, column=0,columnspan=7)
+    CTkLabel(st,text='SELECT PRODUCT',width=25,font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=7, column=0)
+    CTkLabel(st,text=' RACK  QTY LEFT     COST          ',width=25,font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=7, column=1)
+    CTkButton(st,text='Add to bill',width=15,command=append2bill, fg_color="#e04a32", hover_color="#e04a32").grid(row=8, column=6)
+    CTkLabel(st,text='QUANTITY',width=20,font=("Gotham Ultra", 14), text_color="#ffffff").grid(row=7, column=5)
+    qtys=CTkEntry(st)
     qtys.grid(row=8,column=5)
     refresh()
-    Button(st,width=15,text='Main Menu', command=main_menu).grid(row=1,column=6)
-    Button(st,width=15,text='Refresh Stock', command=refresh).grid(row=3,column=6)
-    Button(st,width=15,text='Reset Bill', command=billing).grid(row=4,column=6)
-    Button(st,width=15,text='Print Bill', command=print_bill).grid(row=5,column=6)
-    Button(st,width=15,text='Save Bill', command=make_bill).grid(row=7,column=6)
+    CTkButton(st,width=15,text='Main Menu', command=main_menu, fg_color="#e04a32", hover_color="#e04a32").grid(row=1,column=6)
+    CTkButton(st,width=15,text='Refresh Stock', command=refresh, fg_color="#e04a32", hover_color="#e04a32").grid(row=3,column=6)
+    CTkButton(st,width=15,text='Reset Bill', command=billing, fg_color="#e04a32", hover_color="#e04a32").grid(row=4,column=6)
+    CTkButton(st,width=15,text='Print Bill', command=print_bill, fg_color="#e04a32", hover_color="#e04a32").grid(row=5,column=6)
+    CTkButton(st,width=15,text='Save Bill', command=make_bill, fg_color="#e04a32", hover_color="#e04a32").grid(row=7,column=6)
     
     st.mainloop()
 
@@ -541,10 +583,10 @@ def make_bill(): # makes bill
         if price[i] != '':
             total+=price[i] #totalling
     m='\n\n\n'
-    m+="===============================================\n"
+    m+="==========================================\n"
     m+="                                  No :%s\n\n" % det[5]
-    m+="          MEDPLUS CHEMIST AND DRUGGIST\n"
-    m+="  VIT University, Katpadi, Vellore, T.M.\n\n"
+    m+="          UZ Pharmacy                       \n"
+    m+=" Karachi City / Sir Syed University \n\n"
     m+="-----------------------------------------------\n"
     if t==1:
         m+="Name: %s\n" % named
@@ -602,10 +644,12 @@ def show_rev(): # opens revenue window------------------------------------------
     apt.destroy()
     cb=('cus_name','cus_add','items','Total_cost','bill_dt','bill_no','bill','val_id')
     flag='rev'
-    rev=Tk()
+    rev=CTk()
+    set_appearance_mode("dark")
+    rev.title("Todays Revenue~")
     total=0.0
     today=str(time.localtime()[2])+'/'+str(time.localtime()[1])+'/'+str(time.localtime()[0])
-    Label(rev,text='Today: '+today).grid(row=0,column=0)
+    CTkLabel(rev,text='Today: '+today, font=("Arial Bold", 14), text_color="#601E88").grid(row=0,column=0)
     cur.execute('select * from bills')
     for i in cur:
         if i[4]==today:
@@ -638,19 +682,20 @@ def search():   #search window medicine and symptom details---------------------
     for i in cur:
         symp.append(i[5])
         med_name.append(i[1])
-    st=Tk()
+    st=CTk()
+    set_appearance_mode("dark")
     st.title('SEARCH')
-    Label(st, text=' SEARCH FOR MEDICINE ').grid(row=0, column=0,columnspan=3)
-    Label(st, text='~'*40).grid(row=1, column=0,columnspan=3)
-    Label(st, text='Symptom Name').grid(row=3, column=0)
+    CTkLabel(st, text=' SEARCH FOR MEDICINE ',font=("Gotham Ultra", 14), text_color="#ededed").grid(row=0, column=0,columnspan=3)
+    CTkLabel(st, text='~'*40,font=("Gotham Ultra", 14), text_color="#ededed").grid(row=1, column=0,columnspan=3)
+    CTkLabel(st, text='Symptom Name',font=("Gotham Ultra", 14), text_color="#ededed").grid(row=3, column=0)
     sym=Spinbox(st,values=symp)
     sym.grid(row=3, column=1)
-    Button(st,width=15, text='Search', command=search_med).grid(row=3, column=2)
-    Label(st, text='-'*70).grid(row=4, column=0,columnspan=3)
+    CTkButton(st,width=15, text='Search', command=search_med,fg_color="#e04a32", hover_color="#e04a32").grid(row=3, column=2)
+    CTkLabel(st, text='-'*70).grid(row=4, column=0,columnspan=3)    
     if flags=='apt1':
-        Button(st,width=15, text='Main Menu', command=main_cus).grid(row=6, column=2)
+        CTkButton(st,width=15, text='Main Menu', command=main_cus,fg_color="#e04a32", hover_color="#e04a32").grid(row=6, column=2)
     else:
-        Button(st,width=15, text='Main Menu', command=main_menu).grid(row=6, column=2)
+        CTkButton(st,width=15, text='Main Menu', command=main_menu,fg_color="#e04a32", hover_color="#e04a32").grid(row=6, column=2)
     st.mainloop()
 
 def search_med():
@@ -669,27 +714,42 @@ def search_med():
     c.commit()
     top.mainloop()
 
-def val_cus():  #to enter new valued customer-----------------------------------------------------------NEW VALUED CUSTOMER
+def val_cus():  # to enter new valued customer
     global val, flag, dbt, name_vc, add_vc, cur, c, vc_id
     apt.destroy()
     cur.execute("select * from cus")
-    flag='val'
-    val=Tk()
-    Label(val,text="ENTER VALUED CUSTOMER DETAILS").grid(row=0,column=0,columnspan=3)
-    Label(val,text="-"*60).grid(row=1,column=0,columnspan=3)
-    Label(val,text="Name: ").grid(row=2,column=0)
-    name_vc=Entry(val)
-    name_vc.grid(row=2, column=1)
-    Label(val,text="Address: ").grid(row=3,column=0)
-    add_vc=Entry(val)
-    add_vc.grid(row=3, column=1)
-    Label(val,text="Value Id: ").grid(row=4,column=0)
-    vc_id=Entry(val)
-    vc_id.grid(row=4, column=1)
-    Button(val,text='Submit',command=val_get).grid(row=5, column=1)
-    Button(val,text='Main Menu',command=main_menu).grid(row=5, column=2)
-    Label(val,text='-'*60).grid(row=6,column=0,columnspan=3)
+    flag = 'val'
+    set_appearance_mode("dark")
+    val = CTk()
+    val.geometry("600x480")
+    val.title("New Valued Customer")
+
+    # Header
+    CTkLabel(val, text="ENTER VALUED CUSTOMER DETAILS", font=("Gotham Ultra", 20), text_color="#ffffff").grid(row=0, column=0, columnspan=3, pady=(20, 10))
+    CTkLabel(val, text="-" * 60, font=("Gotham Ultra", 12), text_color="#ffffff").grid(row=1, column=0, columnspan=3)
+
+    # Form
+    CTkLabel(val, text="Name:   ", font=("Gotham Ultra", 11), text_color="#ffffff").grid(row=2, column=0, pady=(10, 10))
+    name_vc = CTkEntry(val, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000")
+    name_vc.grid(row=2, column=1, pady=(10, 10))
+
+    CTkLabel(val, text="Address:   ", font=("Gotham Ultra", 11), text_color="#ffffff").grid(row=3, column=0, pady=(10, 10))
+    add_vc = CTkEntry(val, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000")
+    add_vc.grid(row=3, column=1, pady=(10, 10))
+
+    CTkLabel(val, text="Value Id:   ", font=("Gotham Ultra", 11), text_color="#ffffff").grid(row=4, column=0, pady=(10, 10))
+    vc_id = CTkEntry(val, width=225, fg_color="#EEEEEE", border_color="#601E88", border_width=1, text_color="#000000")
+    vc_id.grid(row=4, column=1, pady=(10, 10))
+
+    # Buttons
+    CTkButton(val, text='Submit', command=val_get, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=5, column=1, pady=(20, 10))
+    CTkButton(val, text='Main Menu', command=main_menu, fg_color="#e04a32", hover_color="#e04a32", font=("Gotham Ultra", 12)).grid(row=5, column=2, pady=(20, 10))
+
+    # Footer
+    CTkLabel(val, text="-" * 60, font=("Gotham Ultra", 12), text_color="#ffffff").grid(row=6, column=0, columnspan=3, pady=(10, 20))
+
     val.mainloop()
+
 
 def val_get():  #to submit new valued customer details
     global name_vc, add_vc, val, dbt ,c, cur, apt, vc_id
@@ -700,36 +760,59 @@ def val_get():  #to submit new valued customer details
         print (i[0], i[1], i[2])
     c.commit()
     login.commit()
-    
-def again():    #for login window-----------------------------------------------------------------------------LOGIN WINDOW
-    global un, pwd, flag, root, apt
+
+def again():    #for login window
+    global un, pwd, flag, app, apt
     if flag=='apt':
         apt.destroy()
-    root=Tk()
-    root.title('YashVone SOFTWARE SOLUTIONS')
-    Label(root,text='CHEMIST AND DRUG SHOP').grid(row=0,column=0,columnspan=5)
-    Label(root,text="VIT UNIVERSITY, KATPADI, VELLORE,  TM").grid(row=1,column=0,columnspan=5)
-    Label(root,text='-------------------------------------------------------').grid(row=2,column=0,columnspan=5)
-    Label(root, text='Username').grid(row=3, column=0)
-    un=Entry(root,width=10)
-    un.grid(row=3, column=1)
-    Label(root, text='Password').grid(row=4, column=0)
-    pwd=Entry(root,width=10)
-    pwd.grid(row=4, column=1)
-    Button(root,width=6,text='Enter',command=check).grid(row=5, column=0)
-    Button(root,width=6,text='Close',command=root.destroy).grid(row=5, column=1)
-    root.mainloop()
+    set_appearance_mode("dark")
+    app = CTk()
+    app.title("Wara & CO. PVT LTD")
+    app.geometry("600x480")
+    app.resizable(1, 1)
+
+    side_img_data = Image.open("side-img.jpg")
+    email_icon_data = Image.open("key.png")
+    password_icon_data = Image.open("lock (1).png")
+
+
+    side_img = CTkImage(dark_image=side_img_data, light_image=side_img_data, size=(300, 480))
+    email_icon = CTkImage(dark_image=email_icon_data, light_image=email_icon_data, size=(30, 30))
+    password_icon = CTkImage(dark_image=password_icon_data, light_image=password_icon_data, size=(30, 30))
+
+    CTkLabel(master=app, text="", image=side_img).pack(expand=True, side="left")
+
+    frame = CTkFrame(master=app, width=300, height=480, fg_color="#121317")
+    frame.pack_propagate(0)
+    frame.pack(expand=True, side="right")
+
+    CTkLabel(master=frame, text="UZ Pharmacy", text_color="#ededed", anchor="w", justify="left", font=("Gotham Ultra", 24)).pack(anchor="w", pady=(50, 5), padx=(25, 0))
+    CTkLabel(master=frame, text="Sign in to your account", text_color="#eaeaea", anchor="w", justify="left", font=("Gotham Ultra", 12)).pack(anchor="w", padx=(25, 0))
+
+    CTkLabel(master=frame, text="  Username:", text_color="#ededed", anchor="w", justify="left", font=("Gotham Ultra", 14), image=email_icon, compound="left").pack(anchor="w", pady=(38, 0), padx=(25, 0))
+    un = CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#ededed", border_width=1, text_color="#000000")
+    un.pack(anchor="w", padx=(25, 0))
+
+    CTkLabel(master=frame, text="  Password:", text_color="#ededed", anchor="w", justify="left", font=("Gotham Ultra", 14), image=password_icon, compound="left").pack(anchor="w", pady=(21, 0), padx=(25, 0))
+    pwd = CTkEntry(master=frame, width=225, fg_color="#EEEEEE", border_color="#ededed", border_width=1, text_color="#000000", show="*")
+    pwd.pack(anchor="w", padx=(25, 0))
+
+    CTkButton(master=frame, text="Login", fg_color="#e04a32", font=("Gotham Ultra", 12), text_color="#ffffff", width=225, command=check).pack(anchor="w", pady=(40, 0), padx=(25, 0))
+    CTkButton(master=frame, text="Close", fg_color="#e04a32", font=("Gotham Ultra", 12), text_color="#ffffff", width=225, command=app.destroy).pack(anchor="w", pady=(20, 0), padx=(25, 0))
+
+    app.mainloop()
     
+
 def check():    #for enter button in login window
-    global un, pwd, login, l, root
-    u=un.get()
-    p=pwd.get()
+    global un, pwd, login, l, app
+    u = un.get()
+    p = pwd.get()
     l.execute("select * from log")
-    for i in l:     
-        if i[0]==u and i[1]==p and u=='admin':
-            root.destroy()
+    for i in l:
+        if i[0] == u and i[1] == p:
+            app.destroy()
             open_win()
-        elif i[0]==u and i[1]==p:
+        elif i[0] == u and i[1] == p:
             root.destroy()
             open_cus()
     login.commit()
